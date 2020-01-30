@@ -59,9 +59,9 @@ I am still writing this tutorial.
 
 In the meantime, **you could take a look at the code** – it works!
 
-The model checkpoint is available [here](https://drive.google.com/drive/folders/12OG-KawSFFs6Pah89V4a_Td-VcwMBE5i?usp=sharing). You can use it directly with [`translate.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/translate.py).
+The trained model checkpoint is available [here](https://drive.google.com/drive/folders/18ltkGJ2P_cV-0AyMrbojN0Ig4JgYp9al?usp=sharing). You can use it directly with [`translate.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/translate.py).
 
-Here's how this checkpoint fares against the test set, as calculated in [`eval.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/eval.py):
+Here's how this model fares against the test set, as calculated in [`eval.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/eval.py):
 
 |BLEU|Tokenization|Cased|sacreBLEU signature|
 |:---:|:---:|:---:|:---:|
@@ -72,4 +72,4 @@ Here's how this checkpoint fares against the test set, as calculated in [`eval.p
 
 The first value (13a tokenization, cased) is how the BLEU score is officially calculated by [WMT](https://www.statmt.org/wmt14/translation-task.html) (`mteval-v13a.pl`).
 
-The BLEU score reported in the paper is **27.3**. This is possibly not calculated in the same manner, however. See [these](https://github.com/tensorflow/tensor2tensor/issues/317#issuecomment-377580270) [comments](https://github.com/tensorflow/tensor2tensor/issues/317#issuecomment-380970191) on the official repository. With the method stated there (i.e. using `get_ende_bleu.sh` and a tweaked reference), the checkpoint scores **26.49**.
+The BLEU score reported in the paper is **27.3**. This is possibly not calculated in the same manner, however. See [these](https://github.com/tensorflow/tensor2tensor/issues/317#issuecomment-377580270) [comments](https://github.com/tensorflow/tensor2tensor/issues/317#issuecomment-380970191) on the official repository. With the method stated there (i.e. using `get_ende_bleu.sh` and a tweaked reference), the trained model scores **26.49**.
