@@ -19,7 +19,7 @@ class MultiHeadAttention(nn.Module):
         :param d_queries: size of query vectors (and also the size of the key vectors)
         :param d_values: size of value vectors
         :param dropout: dropout probability
-        :param in_decoder: is this in Multi-Head Attention sublayer instance in the decoder?
+        :param in_decoder: is this Multi-Head Attention sublayer instance in the decoder?
         """
         super(MultiHeadAttention, self).__init__()
 
@@ -267,7 +267,7 @@ class Encoder(nn.Module):
         """
         Creates a single layer in the Encoder by combining a multi-head attention sublayer and a position-wise FC sublayer.
         """
-        # A Sequential() of sub-layers because the outputs of the multi-head are the inputs of the position-wise FC
+        # A ModuleList of sublayers
         encoder_layer = nn.ModuleList([MultiHeadAttention(d_model=self.d_model,
                                                           n_heads=self.n_heads,
                                                           d_queries=self.d_queries,
@@ -300,6 +300,7 @@ class Encoder(nn.Module):
 
         # Encoder layers
         for encoder_layer in self.encoder_layers:
+            # Sublayers
             encoder_sequences = encoder_layer[0](query_sequences=encoder_sequences,
                                                  key_value_sequences=encoder_sequences,
                                                  key_value_sequence_lengths=encoder_sequence_lengths)  # (N, pad_length, d_model)
@@ -363,9 +364,7 @@ class Decoder(nn.Module):
         """
         Creates a single layer in the Decoder by combining two multi-head attention sublayers and a position-wise FC sublayer.
         """
-        # A ModuleList of sub-layers because the outputs of the first multi-head are not the inputs of the second
-        # They cannot be applied sequentially automatically
-        # So, sub-layers are applied manually in forward()
+        # A ModuleList of sublayers
         decoder_layer = nn.ModuleList([MultiHeadAttention(d_model=self.d_model,
                                                           n_heads=self.n_heads,
                                                           d_queries=self.d_queries,
@@ -404,8 +403,9 @@ class Decoder(nn.Module):
         # Dropout
         decoder_sequences = self.apply_dropout(decoder_sequences)
 
+        # Decoder layers
         for decoder_layer in self.decoder_layers:
-            # Sub-layers are applied manually because the outputs of one are not always compatible with the inputs of the next
+            # Sublayers
             decoder_sequences = decoder_layer[0](query_sequences=decoder_sequences,
                                                  key_value_sequences=decoder_sequences,
                                                  key_value_sequence_lengths=decoder_sequence_lengths)  # (N, pad_length, d_model)
