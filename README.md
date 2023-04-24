@@ -6,7 +6,7 @@ Basic knowledge of PyTorch is assumed.
 
 If you're new to PyTorch, first read [Deep Learning with PyTorch: A 60 Minute Blitz](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html) and [Learning PyTorch with Examples](https://pytorch.org/tutorials/beginner/pytorch_with_examples.html).
 
-Questions, suggestions, or corrections can be posted as issues.
+Questions, suggestions, or corrections can be posted as [issues](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/issues).
 
 I'm using `PyTorch 1.4` in `Python 3.6`.
 
@@ -1353,7 +1353,7 @@ The BLEU score reported in the paper is **27.3**. This is possibly not calculate
 
 # Frequently Asked Questions
 
-I will populate this section over time from common questions asked in the *Issues* section of this repository.
+I will populate this section over time from common questions asked in the [*Issues*](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/issues) section of this repository.
 
 **Some details in your implementation are either different from the paper or not included in the paper. What's up with that?**
 
