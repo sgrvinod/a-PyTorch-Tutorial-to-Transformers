@@ -1120,7 +1120,7 @@ We are now in a position to perform the multi-head attention. We **calculate the
 
 The dot-products are scaled by $\sqrt{d_{model}}$.
 
-Before computing the *Softmax*, we need to **mask away invalid attention access** as per the rules described [earlier](). We introduce up to two masks –
+Before computing the *Softmax*, we need to **mask away invalid attention access** as per the rules described [earlier](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#can-anything-attend-to-anything). We introduce up to two masks –
 
 - Mask away keys that are from pad-tokens. This is why we provide the true key-value sequence lengths as an input variable to this layer.
   
@@ -1172,7 +1172,7 @@ Dropout is applied for regularization, and the input tensor is added point-wise 
 
 See `Encoder` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
 
-This constructs the **Transformer encoder** as [described](). 
+This constructs the **Transformer encoder** [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#transformer-encoder). 
 
 The encoder takes as input $N$ sets of –
 
@@ -1198,7 +1198,7 @@ The inputs and outputs of each encoder layer are tensors of $N \times L_e \times
 
 See `Decoder` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
 
-This constructs the **Transformer decoder** as [described](). 
+This constructs the **Transformer decoder** [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#transformer-decoder). 
 
 The decoder takes as input $N$ sets of –
 
@@ -1232,7 +1232,7 @@ We do not apply the *Softmax* function here because this is done in the loss fun
 
 See `Transformer` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
 
-This constructs the **Transformer** by combinging the encoder and decoder as [described](). 
+This constructs the **Transformer** by combinging the encoder and decoder [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#putting-it-all-together). 
 
 All parameters other than the token embeddings are initialized with [Glorot or Xavier uniform initialization](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_uniform_). Token embeddings are initialized from a [normal distribution](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.normal_). 
 
@@ -1252,7 +1252,7 @@ Here, $N$ is the number of English-German sequence pairs in the batch, $L_d$ is 
 
 As you know, scores and targets at pad-tokens are meaningless and should not be considered in the loss calculation. We **remove all pad-tokens** using [`pack_padded_sequence()`](https://pytorch.org/docs/stable/generated/torch.nn.utils.rnn.pack_padded_sequence.html#torch-nn-utils-rnn-pack-padded-sequence). 
 
-For a helpful visualization of how this function operates, see [this section]() from my previous tutorial. Basically, if you have sequences sorted by decreasing true lengths in a tensor of dimensions $N \times L \times d$, where $L$ is the padded length, `pack_padded_sequence()` flattens it by concatenating only the non-pad tokens from each timestep. Therefore, this flattened tensor of only non-pad tokens has dimensions $k \times d$, where $k$ is the sum of the true lengths $l$ of the sequences, $k=\sum_{i=0}^{N} l_i$.
+For a helpful visualization of how this function operates, see [this section](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Image-Captioning#loss-function) from my previous tutorial. Basically, if you have sequences sorted by decreasing true lengths in a tensor of dimensions $N \times L \times d$, where $L$ is the padded length, `pack_padded_sequence()` flattens it by concatenating only the non-pad tokens from each timestep. Therefore, this flattened tensor of only non-pad tokens has dimensions $k \times d$, where $k$ is the sum of the true lengths $l$ of the sequences, $k=\sum_{i=0}^{N} l_i$.
 
 (This is not important, but if you're interested – `pack_padded_sequence()` was designed for use with RNNs, for dynamic batching across timesteps as a way to avoid processing pad-tokens. It keeps track of the effective batch size $N_t$ at each timestep $t$ in the sorted sequence so that the RNN cell can operate only upon the top $N_t$ (i.e. non-pad) tokens at each timestep, and the outputs will already be aligned for use with the $N_{t+1}$ non-pad tokens in the next timestep. In this case, however, we are only interested in its utility as a convenient method for removing pad-tokens!)
 
@@ -1370,5 +1370,3 @@ Notably, in this implementation, we use the following ideas from the official im
 - We use Xavier/Glorot initialization with a gain of $1$ for encoder and decoder layers and normal initialization with a mean of $0$ and a standard deviation of $d_{model}^{-0.5}$ for embedding layers – this isn't mentioned in the paper either.
 
 - The learning rate curve from the paper is doubled in magnitude. Also, learning rate is warmed up over $8000$ steps, instead of the $4000$ steps mentioned in the paper.
-
-If I think of anything else, I will add it here.
