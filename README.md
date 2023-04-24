@@ -1,4 +1,6 @@
-This is a **[PyTorch](https://pytorch.org) Tutorial to Machine Translation**.
+This is a **[PyTorch](https://pytorch.org) Tutorial to Machine Translation**. 
+
+This is also a tutorial for learning about ***TRANSFORMERS*** and how they work, regardless of intended task or application.
 
 This is the sixth in [a series of tutorials](https://github.com/sgrvinod/Deep-Tutorials-for-PyTorch) I'm writing about _implementing_ cool models on your own with the amazing PyTorch library.
 
@@ -46,9 +48,9 @@ Specifically, we are going to be translating from **English** to **German**. And
 
 * **Machine Translation**. duh.
 
-* **Transformer Network**. In 2017, with the very paper we implement in this tutorial, transformers birthed a new age in natural language understanding. Since its inception, we have all but retired recurrent neural networks (RNNs) for this new type of sequence model with an unparalleled ability for representation and abstraction – all while being simpler, more efficient, and significantly more parallelizable. Today, the application of transformers is near universal, as their resounding success in NLP has also led to increasing adoption in the computer vision space.
+* **Transformer Network**. In 2017, with the very paper we implement in this tutorial, transformers birthed a new age in natural language understanding. Since their inception, we have all but retired recurrent neural networks (RNNs) for this new type of sequence model with an unparalleled ability for representation and abstraction – all while being simpler, more efficient, and significantly more parallelizable. Today, the application of transformers is near universal, as their resounding success in NLP has also led to increasing adoption in the computer vision space.
   
-* **Multi-Head Scaled Dot-Product Attention**. At the heart of the transformer is the attention mechanism, specifically *this* flavour of attention. It allows the transformer to interpret and encode a sequence in a multitude of contexts and with an unprecedented level of nuance, while also doing away with recurrence – something we'd almost learned to live with. 
+* **Multi-Head Scaled Dot-Product Attention**. At the heart of the transformer is the attention mechanism, specifically *this* flavour of attention. It allows the transformer to interpret and encode a sequence in a multitude of contexts and with an unprecedented level of nuance.
 
 * **Positional Embeddings**. While RNNs account for the sequential nature of a sequence implicitly, via their recurrent mode of operation, a transformer views a sequence as a bag of tokens that can be mixed and matched creatively with tokens from the same or different bag. The coordinates of tokens in a sequence are therefore manually injected into the transformer as one-dimensional vectors, or *embeddings*, allowing the transformer to understand and incorporate their relative positions into its calculations.
 
