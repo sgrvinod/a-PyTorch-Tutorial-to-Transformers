@@ -1,6 +1,6 @@
 This is a **[PyTorch](https://pytorch.org) Tutorial to Machine Translation**. 
 
-This is also a tutorial for learning about ***TRANSFORMERS*** and how they work, regardless of intended task or application.
+This is also a tutorial for learning about **TRANSFORMERS** and how they work, regardless of intended task or application.
 
 This is the sixth in [a series of tutorials](https://github.com/sgrvinod/Deep-Tutorials-for-PyTorch) I'm writing about _implementing_ cool models on your own with the amazing PyTorch library.
 
