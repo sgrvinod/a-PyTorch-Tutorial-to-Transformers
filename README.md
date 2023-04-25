@@ -48,27 +48,27 @@ Specifically, we are going to be translating from **English** to **German**. And
 
 * **Machine Translation**. duh.
 
-* **Transformer Network**. In 2017, with the publication of the very paper we implement in this tutorial, transformers birthed a new age in natural language understanding. Since their inception, we have all but retired recurrent neural networks (RNNs) for this new type of sequence model with an unparalleled ability for representation and abstraction – all while being simpler, more efficient, and significantly more parallelizable. Today, the application of transformers is near universal, as their resounding success in NLP has also led to their increasing adoption in computer vision.
+* **Transformer Network**. We have all but retired recurrent neural networks (RNNs) in favour of transformers, a new type of sequence model that possesses an unparalleled ability for representation and abstraction – all while being simpler, more efficient, and significantly more parallelizable. Today, the application of transformers is near universal, as their resounding success in NLP has also led to increasing adoption in computer vision tasks.
   
 * **Multi-Head Scaled Dot-Product Attention**. At the heart of the transformer is the attention mechanism, specifically *this* flavour of attention. It allows the transformer to interpret and encode a sequence in a multitude of contexts and with an unprecedented level of nuance.
 
-* **Positional Embeddings**. While RNNs account for the sequential nature of a sequence implicitly, via their recurrent mode of operation, a transformer views a sequence as a bag of tokens that can be mixed and matched creatively with tokens from the same or different bag. The coordinates of tokens in a sequence are therefore manually injected into the transformer as one-dimensional vectors, or *embeddings*, allowing the transformer to understand and incorporate their relative positions into its calculations.
+* **Encoder-Decoder Architecture**. Similar to RNNs, transformer models for sequence transduction typically consist of an encoder that encodes an input sequence, and a decoder that decodes it, token by token, into the output sequence.
 
-* **Encoder-Decoder Architecture**. Like we do with RNNs, transformer models in a "sequence to sequence" setting can make use of an encoder to encode the input sequence and a decoder to decode it, token by token, into the output sequence.
+* **Positional Embeddings**. Unlike RNNs, transformers do not innately account for the sequential nature of text – they instead view such a sequence as a bag of tokens, or pieces of text, that can be freely mixed and matched with tokens from the same or different bag. The coordinates of tokens in a sequence are therefore manually injected into the transformer as one-dimensional vectors or *embeddings*, allowing the transformer to incorporate their relative positions into its calculations.
   
-* **Byte Pair Encoding**. Language models are constrained by their vocabularies, and machine translation is inherently an *open*-vocabulary problem, especially when dealing with morphologically rich languages. Byte Pair Encoding is a way to construct a vocabulary of moderate size while still being able to understand, approximate, and encode nearly *any* word, whether it is known, seldom known, or unknown.
+* **Byte Pair Encoding**. Language models are both enabled and constrained by their vocabularies. Machine translation, especially, is an *open*-vocabulary problem. Byte Pair Encoding is a way to construct a vocabulary of moderate size that is still able to represent nearly *any* word, whether it is known, seldom known, or unknown.
 
-* **Beam Search**. As an alternative to simply choosing the highest scoring token at each step of the generation process, we consider *multiple* candidates at each step, reserving judgement until we see what they make of themselves down the assembly line – before finally picking the most optimal *sequence* of tokens.
+* **Beam Search**. As an alternative to simply choosing the highest-scoring token at each step of the generative process, we consider *multiple* candidates, reserving judgement until we see what they give rise to in subsequent steps – before finally picking the best *overall* output sequence.
 
 # Overview
 
-In this section, I will present an overview of this model. If you're already familiar with it, you can skip straight to the [Implementation](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#implementation) section or the commented code.
+In this section, I will present an overview of the transformer. If you're already familiar with it, you can skip straight to the [Implementation](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#implementation) section or the commented code.
 
 Transformers have completely changed the deep learning landscape. They've replaced recurrent neural networks (RNNs) as the workhorse of modern NLP. They have caused a seismic shift in our sequence modeling capabilities, not only with their amazing representational ability, but also with their capacity for transfer learning after self-supervised pre-training on large amounts of data. You have no doubt heard of these models in one form or another – BERT, GPT, etc. 
 
 Today, they are also increasingly being used in computer vision applications as an alternative to, or in combination with, convolutional neural networks (CNNs).
 
-As in the original transformer paper, the context presented here is an NLP task – specifically the sequence transduction problem of machine translation. If you want to apply transformer to images, this tutorial is still a good place to learn about how they work. 
+As in the original transformer paper, the context presented here is an NLP task – specifically the sequence transduction problem of machine translation. If you want to apply transformers to images, this tutorial is still a good place to learn about how they work. 
 
 ### Better than RNNS, but how?
 
@@ -88,9 +88,9 @@ On the other hand, our ability to train deep neural networks is somewhat predica
 
 The sequential processing of text in an RNN introduces another problem. The output of the RNN at a given position is conditioned directly on the output at the previous position, which in turn is conditioned on *its* previous position, and so on. However, **logical dependencies in text can occur across longer distances**. It is often the case that you need access to information from a dozen positions ago. 
 
-No doubt some of this information can persist across moderate distances, but a lot of it **could have decayed in the daisy-chain of computation that defines the RNN**. It's easy to see why – we're relying on the output at each position to not only encode the output at that position but also _other_ information that _may_ (or _may not_) be useful _ten_ steps down the line, with the outputs of _each_ intervening step also having to encode their own information *and* pass on this _possibly_ relevant information. 
+No doubt some of this information can persist across moderate distances, but a lot of it **could have decayed in the daisy-chain of computation that defines the RNN**. It's easy to see why – we're relying on the output at each position to encode not only the output at *that* position but also _other_ information that _may_ (or _may not_) be useful _ten_ steps down the line, with the outputs of _each_ intervening step also having to encode their own information *and* pass on this _possibly_ relevant information. 
 
-There have been various modifications to the original RNN cell over the years to allievate this problem, the most notable of which is probably the Long Short-Term Memory (LSTM) cell, which introduces an additional pathway known as the "cell state" for the sequential flow of information across cells, thereby reducing the burden on the cell outputs to encode all of this information. While this allows for modeling longer dependencies, the fundamental problem still exists – **an RNN can access other positions only through the intervening positions** and *not* directly. 
+There have been various modifications to the original RNN cell over the years to allievate this problem, the most notable of which is probably the Long Short-Term Memory (LSTM) cell, which introduces an additional pathway known as the "cell state" for the sequential flow of information across cells, thereby reducing the burden on the cell outputs to encode all of this information. While this allows for modeling longer dependencies, the fundamental problem still exists – **an RNN can access other positions only through intervening positions** and *not* directly. 
 
 **Transformers allow direct access to other positions.**
 
