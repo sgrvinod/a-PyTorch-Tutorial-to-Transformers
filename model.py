@@ -541,7 +541,7 @@ class LabelSmoothedCE(torch.nn.Module):
         """
         # Remove pad-positions and flatten
         inputs, _, _, _ = pack_padded_sequence(input=inputs,
-                                               lengths=lengths.cpu(),  #"lengths" tensor is expected to be on the CPU (int64 CPU tensor), but it is currently on the GPU (cuda:0 Long tensor).
+                                               lengths=lengths.cpu(),  # the "lengths" tensor is expected to be on the CPU
                                                batch_first=True,
                                                enforce_sorted=False)  # (sum(lengths), vocab_size)
         targets, _, _, _ = pack_padded_sequence(input=targets,
