@@ -545,7 +545,7 @@ class LabelSmoothedCE(torch.nn.Module):
                                                batch_first=True,
                                                enforce_sorted=False)  # (sum(lengths), vocab_size)
         targets, _, _, _ = pack_padded_sequence(input=targets,
-                                                lengths=lengths,
+                                                lengths=lengths.to(device),
                                                 batch_first=True,
                                                 enforce_sorted=False)  # (sum(lengths))
 
