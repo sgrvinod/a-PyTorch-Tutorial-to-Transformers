@@ -8,27 +8,27 @@ Basic knowledge of PyTorch is assumed.
 
 If you're new to PyTorch, first read [Deep Learning with PyTorch: A 60 Minute Blitz](https://pytorch.org/tutorials/beginner/deep_learning_60min_blitz.html) and [Learning PyTorch with Examples](https://pytorch.org/tutorials/beginner/pytorch_with_examples.html).
 
-Questions, suggestions, or corrections can be posted as [issues](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/issues).
+Questions, suggestions, or corrections can be posted as [issues](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/issues).
 
 I'm using `PyTorch 1.4` in `Python 3.6`.
 
 # Contents
 
-[***Objective***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#objective)
+[***Objective***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#objective)
 
-[***Concepts***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#concepts)
+[***Concepts***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#concepts)
 
-[***Overview***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#overview)
+[***Overview***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#overview)
 
-[***Implementation***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#implementation)
+[***Implementation***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#implementation)
 
-[***Training***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#training)
+[***Training***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#training)
 
-[***Inference***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#inference)
+[***Inference***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#inference)
 
-[***Evaluation***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#evaluation)
+[***Evaluation***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#evaluation)
 
-[***Frequently Asked Questions***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#frequently-asked-questions)
+[***Frequently Asked Questions***](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#frequently-asked-questions)
 
 # Objective
 
@@ -80,7 +80,7 @@ Specifically, we are going to be translating from **English** to **German**. And
 
 # Overview
 
-In this section, I will present an overview of the transformer. If you're already familiar with it, you can skip straight to the [Implementation](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#implementation) section or the commented code.
+In this section, I will present an overview of the transformer. If you're already familiar with it, you can skip straight to the [Implementation](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#implementation) section or the commented code.
 
 Transformers have completely changed the deep learning landscape. They've replaced recurrent neural networks (RNNs) as the workhorse of modern NLP. They have caused a seismic shift in our sequence modeling capabilities, not only with their amazing representational ability, but also with their capacity for transfer learning after self-supervised pre-training on large amounts of data. You have no doubt heard of these models in one form or another – BERT, GPT, etc. 
 
@@ -134,7 +134,7 @@ In fact, over the years, we've tried just about everything – characters, words
 
 **Subwords** can be characters, words, or anything in between. They are a nice trade-off between a compact character vocabulary with units that aren't meaningful by themselves that produce extremely long sequences, and a monstrously large vocabulary of full words that would still be completely tripped up by a new word. Subwords allow for encoding almost any word, even unseen words, with a relatively compressed vocabulary size.
 
-To create an optimal vocabulary of subwords, we will be using a technique called **Byte Pair Encoding**, a form of subword tokenization. We will study how this works [later](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#byte-pair-encoding). For now, I only wanted to give you a heads up in case you're wondering why the sequences in our examples are not always split into full words. 
+To create an optimal vocabulary of subwords, we will be using a technique called **Byte Pair Encoding**, a form of subword tokenization. We will study how this works [later](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#byte-pair-encoding). For now, I only wanted to give you a heads up in case you're wondering why the sequences in our examples are not always split into full words. 
 
 As an example, let's consider the following –
 
@@ -440,7 +440,7 @@ In the rest of the tutorial, we will denote a self-attention layer with a single
 <img src="./img/self_attention.PNG">
 </p>
 
-In ***cross*-attention**, we interpret a sequence in the light of a different sequence. As we saw [earlier](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#a-familiar-form), generation of a new sequence during inference is piecemeal – tokens are generated one at a time. At each step, for example, a partially generated German sequence must be enriched with information from the English sequence, itself richly encoded through self-attention, required to further the translation. 
+In ***cross*-attention**, we interpret a sequence in the light of a different sequence. As we saw [earlier](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#a-familiar-form), generation of a new sequence during inference is piecemeal – tokens are generated one at a time. At each step, for example, a partially generated German sequence must be enriched with information from the English sequence, itself richly encoded through self-attention, required to further the translation. 
 
 In the rest of the tutorial, we can denote a cross-attention layer with two different colours, indicating that the query and key-value sequences are *not* the same.
 
@@ -610,7 +610,7 @@ The German translation by the model is tokenized as follows –
 ['_Das', '_Schön', 'ste,', '_was', '_wir', '_erleben', '_können,', '_ist', '_das', '_Geheim', 'nis', ':', '_Es', '_ist', '_die', '_grundlegende', '_Em', 'otion', '_die', '_an', '_der', '_Wie', 'ge', '_der', '_wahren', '_Kunst', '_und', '_der', '_wahren', '_Wissenschaft', '_steht.']
 ```
 
-The figures below visualize a *few* heads from the first and last encoder and decoder layers. For visualizations of *all* heads in these layers, check the [*img* folder](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/tree/master/img) in this repository. Note that I will omit the "_" (underscores) from the tokens, which represent word beginnings, for readability. 
+The figures below visualize a *few* heads from the first and last encoder and decoder layers. For visualizations of *all* heads in these layers, check the [*img* folder](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/tree/master/img) in this repository. Note that I will omit the "_" (underscores) from the tokens, which represent word beginnings, for readability. 
 
 #### Encoder Self-Attention
 
@@ -682,7 +682,7 @@ From the head above, we confirm our earlier suspicion that some non-keyword toke
 
 In this head, we catch a glimpse of the model's German-to-English dictionary, because German tokens are clearly attending to their English counterparts!
 
-For visualizations of attention of *all* heads in the first or last encoder or decoder layers, check the [*img* folder](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/tree/master/img) in this repository. But remember, it's often hard to understand why a particular head might be doing whatever it's doing. In most cases, we can only speculate, as I have above. And it's even harder in deeper layers because we've no idea what's been encoded into each position that far into the network.
+For visualizations of attention of *all* heads in the first or last encoder or decoder layers, check the [*img* folder](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/tree/master/img) in this repository. But remember, it's often hard to understand why a particular head might be doing whatever it's doing. In most cases, we can only speculate, as I have above. And it's even harder in deeper layers because we've no idea what's been encoded into each position that far into the network.
 
 Now, let's continue with our study of the transformer model – there are still a few loose ends to tie up.
 
@@ -974,11 +974,11 @@ The **test data** is the *newstest2014* dataset, with 3003 English-German senten
 
 #### Download and Prepare Datasets
 
-See [`prepare_data.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/prepare_data.py).
+See [`prepare_data.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/prepare_data.py).
 
 This executes two functions – 
 
-- See `download_data()` in [`utils.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/download_data.py).
+- See `download_data()` in [`utils.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/download_data.py).
 
   While all datasets can be downloaded manually from the [WMT14 homepage](https://www.statmt.org/wmt14/translation-task.html), **you do not need to**. This function automatically downloads them.
 
@@ -986,7 +986,7 @@ This executes two functions –
 
   Validation and test sets are downloaded using the [sacreBLEU](https://github.com/mjpost/sacrebleu) library, which we will also use for computing evaluation metrics – make sure you have it installed. This saves the files `val.en`, `val.de`, `test.en`, and `test.de`. 
 
-- See `prepare_data()` in [`utils.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/prepare_data.py).
+- See `prepare_data()` in [`utils.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/prepare_data.py).
 
   This combines the contents of all the extracted training datasets into single files `train.en` and `train.de`, amounting to about 4.5 million English-German sentence pairs.
 
@@ -1040,7 +1040,7 @@ Therefore, **target or decoder or German sequence lengths fed to the model must 
 
 ### Custom DataLoader
 
-See `SequenceLoader` in [`dataloader.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/dataloader.py).
+See `SequenceLoader` in [`dataloader.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/dataloader.py).
 
 Typically, a PyTorch project will involve the creation of a PyTorch [`Dataset`](https://pytorch.org/docs/master/data.html#torch.utils.data.Dataset), which returns the $i$th datapoint – a *single* datapoint – in the dataset. This is used by a PyTorch [`DataLoader`](https://pytorch.org/docs/master/data.html#torch.utils.data.DataLoader) to create batches of fixed size by stacking as many datapoints from the dataset, randomly or in the same order, into larger tensors. 
 
@@ -1072,7 +1072,7 @@ For a new epoch of training, the dataloader can be reset by invoking its `create
 
 ### Multi-Head Attention Layer
 
-See `MultiHeadAttention` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
+See `MultiHeadAttention` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/model.py).
 
 At the time of creation of each instance of this layer, we specify whether it is going to be an attention layer in the decoder with the `in_decoder` parameter. This is because self-attention in the decoder behaves differently from self-attention in the encoder – in the former, each token can only attend to tokens occuring chronologically before it.
 
@@ -1140,7 +1140,7 @@ We are now in a position to perform the multi-head attention. We **calculate the
 
 The dot-products are scaled by $\sqrt{d_{model}}$.
 
-Before computing the *Softmax*, we need to **mask away invalid attention access** as per the rules described [earlier](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#can-anything-attend-to-anything). We introduce up to two masks –
+Before computing the *Softmax*, we need to **mask away invalid attention access** as per the rules described [earlier](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#can-anything-attend-to-anything). We introduce up to two masks –
 
 - Mask away keys that are from pad-tokens. This is why we provide the true key-value sequence lengths as an input variable to this layer.
   
@@ -1178,7 +1178,7 @@ Dropout is applied for regularization, and the original query sequences tensor i
 
 ### Feed-Forward Layer
 
-See `PositionWiseFCNetwork` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
+See `PositionWiseFCNetwork` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/model.py).
 
 This takes as input a batch of $N$ sequences in the form of a tensor of $N \times L \times d_{model}$ dimensions. 
 A copy of this tensor is stored for the purposes of a skip connection.
@@ -1190,9 +1190,9 @@ Dropout is applied for regularization, and the input tensor is added point-wise 
 
 ### Encoder
 
-See `Encoder` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
+See `Encoder` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/model.py).
 
-This constructs the **Transformer encoder** [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#transformer-encoder). 
+This constructs the **Transformer encoder** [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#transformer-encoder). 
 
 The encoder takes as input $N$ sets of –
 
@@ -1216,9 +1216,9 @@ The inputs and outputs of each encoder layer are tensors of $N \times L_e \times
 
 ### Decoder
 
-See `Decoder` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
+See `Decoder` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/model.py).
 
-This constructs the **Transformer decoder** [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#transformer-decoder). 
+This constructs the **Transformer decoder** [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#transformer-decoder). 
 
 The decoder takes as input $N$ sets of –
 
@@ -1250,9 +1250,9 @@ We do not apply the *Softmax* function here because this is done in the loss fun
 
 ### Transformer
 
-See `Transformer` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
+See `Transformer` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/model.py).
 
-This constructs the **Transformer** by combinging the encoder and decoder [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation#putting-it-all-together). 
+This constructs the **Transformer** by combinging the encoder and decoder [as described](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#putting-it-all-together). 
 
 All parameters other than the token embeddings are initialized with [Glorot or Xavier uniform initialization](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.xavier_uniform_). Token embeddings are initialized from a [normal distribution](https://pytorch.org/docs/stable/nn.init.html#torch.nn.init.normal_). 
 
@@ -1260,7 +1260,7 @@ As explained, we tie the parameters of the token embedding layer in the encoder,
 
 ### Label-Smoothed Cross Entropy
 
-See `LabelSmoothedCE` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/model.py).
+See `LabelSmoothedCE` in [`model.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/model.py).
 
 This takes as input $N$ sets of –
 
@@ -1284,7 +1284,7 @@ We **calculate the label-smoothed cross entropy loss** from these smoothed label
 
 # Training
 
-See [`prepare_data.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/prepare_data.py).
+See [`prepare_data.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/prepare_data.py).
 
 Before you begin, make sure to **download and prepare the required data** for training, validation, and evaluation. To do this, run the contents of this file after pointing it to the folder where you want data to be downloaded, extracted, and prepared –
 
@@ -1292,7 +1292,7 @@ Before you begin, make sure to **download and prepare the required data** for tr
 python prepare_data.py
 ```
 
-See [`train.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/train.py).
+See [`train.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/train.py).
 
 The parameters for the model (and training it) are at the beginning of the file, so you can easily check or modify them should you need to.
 
@@ -1304,7 +1304,7 @@ python train.py
 
 Checkpoints are saved at the end of every epoch of training with the name `transormer_checkpoint.pth.tar`, with each new checkpoint overwriting the previous one. To **resume training at a checkpoint**, point to the corresponding file with the `checkpoint` parameter at the beginning of the code.
 
-See [`average_checkpoints.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/average_checkpoints.py).
+See [`average_checkpoints.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/average_checkpoints.py).
 
 Checkpoints are also saved as separate files every $1500$ steps in the final two epochs only, with the name `step[N]_transformer_checkpoint_pth.tar`, where `[N]` is the step number. These checkpoints should be averaged to produce the final transformer checkpoint that will be used in evaluation and inference. To **average all such checkpoints** after training, run this file –
 
@@ -1336,7 +1336,7 @@ Note that this checkpoint should be [loaded directly with PyTorch](https://pytor
 
 # Inference
 
-See [`translate.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/translate.py).
+See [`translate.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/translate.py).
 
 Make sure to point to both the BPE model and trained checkpoint at the beginning of the file. 
 
@@ -1344,9 +1344,9 @@ Run the `translate()` function on any source English sequence with your desired 
 
 # Evaluation
 
-Make sure to point to both the BPE model and the trained checkpoint at the beginning of [`translate.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/translate.py), since the `translate()` function from this file is used to perform the evaluation in [`eval.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/eval.py). 
+Make sure to point to both the BPE model and the trained checkpoint at the beginning of [`translate.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/translate.py), since the `translate()` function from this file is used to perform the evaluation in [`eval.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/eval.py). 
 
-See [`eval.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/blob/master/eval.py).
+See [`eval.py`](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/blob/master/eval.py).
 
 To **evaluate the chosen model checkpoint**, run this file –
 
@@ -1373,7 +1373,7 @@ The BLEU score reported in the paper is **27.3**. This is possibly not calculate
 
 # Frequently Asked Questions
 
-I will populate this section over time from common questions asked in the [*Issues*](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Machine-Translation/issues) section of this repository.
+I will populate this section over time from common questions asked in the [*Issues*](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers/issues) section of this repository.
 
 **Some details in your implementation are either different from the paper or not included in the paper. What's up with that?**
 
