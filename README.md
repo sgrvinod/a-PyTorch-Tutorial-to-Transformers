@@ -1,6 +1,6 @@
-This is a **[PyTorch](https://pytorch.org) Tutorial to Machine Translation**. 
+This is a **[PyTorch](https://pytorch.org) Tutorial to Transformers**. 
 
-This is also a tutorial for learning about **TRANSFORMERS** and how they work, regardless of intended task or application.
+While we will apply the transformer to a specific task – machine translation – in this tutorial, this is still a tutorial on **TRANSFORMERS** and how they work. You've come to the right place, regardless of your intended task, application, or domain – natural language processing (NLP) or computer vision (CV). 
 
 This is the sixth in [a series of tutorials](https://github.com/sgrvinod/Deep-Tutorials-for-PyTorch) I'm writing about _implementing_ cool models on your own with the amazing PyTorch library.
 
@@ -32,6 +32,24 @@ I'm using `PyTorch 1.4` in `Python 3.6`.
 
 # Objective
 
+*Broadly*...
+
+**To build a transformer model.**
+
+---
+
+*More precisely*...
+
+**To build a model that can generate an output sequence given an input sequence.**
+
+We choose an application that represents one of the most complex uses of a transformer – a sequence to sequence problem.
+
+But once you understand the transformer, you can just as easily apply it to any task, application, or even *domain* (NLP or CV) of your choosing. After all, an image is also a sequence, but over two-dimensional space instead of time.
+
+---
+
+*Even more precisely...*
+
 **To build a model that can translate from one language to another.**
 
 >Um ein Modell zu erstellen, das von einer Sprache in eine andere übersetzen kann.
@@ -50,15 +68,15 @@ Specifically, we are going to be translating from **English** to **German**. And
 
 * **Transformer Network**. We have all but retired recurrent neural networks (RNNs) in favour of transformers, a new type of sequence model that possesses an unparalleled ability for representation and abstraction – all while being simpler, more efficient, and significantly more parallelizable. Today, the application of transformers is near universal, as their resounding success in NLP has also led to increasing adoption in computer vision tasks.
   
-* **Multi-Head Scaled Dot-Product Attention**. At the heart of the transformer is the attention mechanism, specifically *this* flavour of attention. It allows the transformer to interpret and encode a sequence in a multitude of contexts and with an unprecedented level of nuance.
+* **Multi-Head Scaled Dot-Product Attention**. At the heart of the transformer is the attention mechanism, specifically this flavour of attention. It allows the transformer to interpret and encode a sequence in a multitude of contexts and with an unprecedented level of nuance.
 
 * **Encoder-Decoder Architecture**. Similar to RNNs, transformer models for sequence transduction typically consist of an encoder that encodes an input sequence, and a decoder that decodes it, token by token, into the output sequence.
 
 * **Positional Embeddings**. Unlike RNNs, transformers do not innately account for the sequential nature of text – they instead view such a sequence as a bag of tokens, or pieces of text, that can be freely mixed and matched with tokens from the same or different bag. The coordinates of tokens in a sequence are therefore manually injected into the transformer as one-dimensional vectors or *embeddings*, allowing the transformer to incorporate their relative positions into its calculations.
   
-* **Byte Pair Encoding**. Language models are both enabled and constrained by their vocabularies. Machine translation, especially, is an *open*-vocabulary problem. Byte Pair Encoding is a way to construct a vocabulary of moderate size that is still able to represent nearly *any* word, whether it is known, seldom known, or unknown.
+* **Byte Pair Encoding**. Language models are both enabled and constrained by their vocabularies. Machine translation, especially, is an *open*-vocabulary problem. Byte Pair Encoding is a way to construct a vocabulary of moderate size that is still able to represent nearly any word, whether it is known, seldom known, or unknown.
 
-* **Beam Search**. As an alternative to simply choosing the highest-scoring token at each step of the generative process, we consider *multiple* candidates, reserving judgement until we see what they give rise to in subsequent steps – before finally picking the best *overall* output sequence.
+* **Beam Search**. As an alternative to simply choosing the highest-scoring token at each step of the generative process, we consider multiple candidates, reserving judgement until we see what they give rise to in subsequent steps – before finally picking the best *overall* output sequence.
 
 # Overview
 
@@ -68,7 +86,7 @@ Transformers have completely changed the deep learning landscape. They've replac
 
 Today, they are also increasingly being used in computer vision applications as an alternative to, or in combination with, convolutional neural networks (CNNs).
 
-As in the original transformer paper, the context presented here is an NLP task – specifically the sequence transduction problem of machine translation. If you want to apply transformers to images, this tutorial is still a good place to learn about how they work. 
+As in the original transformer paper, the context presented here is an NLP task – specifically the sequence transduction problem of machine translation. If you want to apply transformers to images, this tutorial is still a good place to learn about how they work.
 
 ### Better than RNNS, but how?
 
@@ -88,11 +106,11 @@ On the other hand, our ability to train deep neural networks is somewhat predica
 
 The sequential processing of text in an RNN introduces another problem. The output of the RNN at a given position is conditioned directly on the output at the previous position, which in turn is conditioned on *its* previous position, and so on. However, **logical dependencies in text can occur across longer distances**. It is often the case that you need access to information from a dozen positions ago. 
 
-No doubt some of this information can persist across moderate distances, but a lot of it **could have decayed in the daisy-chain of computation that defines the RNN**. It's easy to see why – we're relying on the output at each position to encode not only the output at *that* position but also _other_ information that _may_ (or _may not_) be useful _ten_ steps down the line, with the outputs of _each_ intervening step also having to encode their own information *and* pass on this _possibly_ relevant information. 
+No doubt some of this information can persist across moderate distances, but a lot of it **could have decayed in the daisy-chain of computation that defines the RNN**. It's easy to see why – we're relying on the output at each position to encode not only the output at *that* position but also _other_ information that may (or may not) be useful ten steps down the line, with the outputs of each intervening step also having to encode their own information *and* pass on this possibly relevant information. 
 
-There have been various modifications to the original RNN cell over the years to allievate this problem, the most notable of which is probably the Long Short-Term Memory (LSTM) cell, which introduces an additional pathway known as the "cell state" for the sequential flow of information across cells, thereby reducing the burden on the cell outputs to encode all of this information. While this allows for modeling longer dependencies, the fundamental problem still exists – **an RNN can access other positions only through intervening positions** and *not* directly. 
+There have been various modifications to the original RNN cell over the years to allievate this problem, the most notable of which is probably the Long Short-Term Memory (LSTM) cell, which introduces an additional pathway known as the "cell state" for the sequential flow of information across cells, thereby reducing the burden on the cell outputs to encode all of this information. While this allows for modeling longer dependencies, the fundamental problem still exists – **an RNN can access other positions only through intervening positions** and not directly. 
 
-**Transformers allow direct access to other positions.**
+**Transformers allow *direct access* to other positions.**
 
 <p align="center">
 <img src="./img/access.PNG">
@@ -102,7 +120,7 @@ This means that each position can use information directly from other positions 
 
 The "direct access" we are speaking of occurs through an **attention mechanism**, something not completely unlike attention mechanisms you may have encountered earlier – for example, between an RNN encoder and decoder. If the concept is completely unfamiliar to you, it doesn't matter as we will go over it in quite some detail very soon.
 
-I would like to point out here that RNNs need not be unidirectional. Since important textual context can occur both before and after a certain position in the sequence, we often use *bidrectional* RNNs, where we operate two different RNN cells in opposite directions and combine their outputs. On the other hand, **a transformer layer is inherently bidirectional** – unless we *choose* to constrain access to a particular direction, as we will see later.
+I would like to point out here that RNNs need not be unidirectional. Since important textual context can occur both before and after a certain position in the sequence, we often use *bidrectional* RNNs, where we operate two different RNN cells in opposite directions and combine their outputs. On the other hand, **a transformer layer is inherently bidirectional** – unless we choose to constrain access to a particular direction, as we will see later.
 
 Also note that in RNNs, information about the positions of individual elements in the sequence are inherently encoded into the RNN by the fact that we process them in a specific order. If in a transformer, they are being processed all at once, **we need another way of introducing this positional information**. We will explore this later on.
 
@@ -152,7 +170,7 @@ From this point on, I will simply refer to the units in a sequence as ***tokens*
 
 ### A familiar form
 
-While a transformer *is* quite different in its inner working compared to an RNN, they do take on a structure that you may already be familiar with – **an encoder and a decoder.**
+While a transformer is quite different in its inner working compared to an RNN, they do take on a structure that you may already be familiar with – **an encoder and a decoder.**
 
 The goal of the encoder is to ***encode* the input sequence** into a deep, "learned" representation. Like in an RNN, this involves encoding each token in the sequence.
 
@@ -214,7 +232,7 @@ The goal is, given a ***query***, to find a ***value*** that is most closely mat
 <img src="./img/queries_keys_values_2.PNG">
 </p>
 
-But in real life, there is rarely a *single* relevant match – relevancy is a spectrum! 
+But in real life, there is rarely a single relevant match – relevancy is a spectrum! 
 
 <p align="center">
 <img src="./img/queries_keys_values_3.PNG">
@@ -226,9 +244,9 @@ Would it then make sense to return a weighted average of the values instead as t
 <img src="./img/queries_keys_values_4.PNG">
 </p>
 
-Yes, it would absolutely make sense, *especially* if the values are vectors or *embeddings*, where the different dimensions numerically encode various (and often abstract) properties!
+Yes, it would absolutely make sense, especially if the values are vectors or *embeddings*, where the different dimensions numerically encode various (and often abstract) properties!
 
-**This process, in a nutshell, is the *attention* mechanism.**  The query is *attending* to the values via their keys. In other words, they query pays varying (but appropriate) degrees of attention to the different values, producing an aggregate, nuanced result that best represents that query in the context of these values. 
+**This process, in a nutshell, is the *attention* mechanism.**  The query is *attending* to the values via their keys. In other words, they query pays varying (but appropriate) degrees of *attention* to the different values, producing an aggregate, nuanced result that best represents that query in the context of these values. 
 
 The terms *queries*, *keys*, and *values* were unfamiliar to me when I first read this paper. I suppose they're borrowed from database terminology. While not complex, they may be new to you as well and may take some time getting used to. At this point, remember only this – with an attention mechanism, **you can represent any token in your sequence, i.e. *query*, as some appropriately weighted sum of representations of all tokens, i.e. *values*, in the same or entirely different sequence**. 
 
@@ -238,7 +256,7 @@ In transformers, however, attention mechanisms not only abound – they are the 
 
 Okay, now that I've hyped it up, you might be wondering exactly how the attention mechanism works. How is a query matched to the keys that represent the values? There are several different ways this can be accomplished. 
 
-In the transformer, we use ***multi-head scaled dot-product attention***. No, it's not a [type of monster](https://www.google.com/search?tbm=isch&q=multi+head+scaled+monster). Let's unpack this ominous-sounding name, shall we?
+In the transformer, we use ***multi-head scaled dot-product attention***. Let's unpack this [ominous-sounding name](https://www.google.com/search?tbm=isch&q=multi+head+scaled+monster), shall we?
 
 ### *Dot-Product* Attention
 
