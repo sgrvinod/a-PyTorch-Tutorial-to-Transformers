@@ -110,7 +110,7 @@ No doubt some of this information can persist across moderate distances, but a l
 
 There have been various modifications to the original RNN cell over the years to allievate this problem, the most notable of which is probably the Long Short-Term Memory (LSTM) cell, which introduces an additional pathway known as the "cell state" for the sequential flow of information across cells, thereby reducing the burden on the cell outputs to encode all of this information. While this allows for modeling longer dependencies, the fundamental problem still exists – **an RNN can access other positions only through intervening positions** and not directly. 
 
-**Transformers allow *direct access* to other positions.**
+**Transformers allow direct access to other positions.**
 
 <p align="center">
 <img src="./img/access.PNG">
