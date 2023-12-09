@@ -1,6 +1,6 @@
 This is a **[PyTorch](https://pytorch.org) Tutorial to Transformers**. 
 
-While we will apply the transformer to a specific task – machine translation – in this tutorial, this is still a tutorial on **TRANSFORMERS** and how they work. You've come to the right place, regardless of your intended task, application, or domain – natural language processing (NLP) or computer vision (CV). 
+While we will apply the transformer to a specific task – machine translation – in this tutorial, this is still a tutorial on **transformers** and how they work. You've come to the right place, regardless of your intended task, application, or domain – natural language processing (NLP) or computer vision (CV). 
 
 This is the sixth in [a series of tutorials](https://github.com/sgrvinod/Deep-Tutorials-for-PyTorch) I'm writing about _implementing_ cool models on your own with the amazing PyTorch library.
 
