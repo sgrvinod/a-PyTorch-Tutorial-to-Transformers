@@ -1138,7 +1138,7 @@ In a similar vein, keys are rearranged to $(N * h) \times L_{keys} \times d_{key
 
 We are now in a position to perform the multi-head attention. We **calculate the dot-products** between the queries and keys. This is accomplished with a *batch matrix multiplication* operation using [`torch.bmm()`](https://pytorch.org/docs/stable/generated/torch.bmm.html#torch-bmm). For each of the $N * h$ datapoints, it computes the dot-products of each of the $L_{queries}$ queries with each of the $L_{keys}$ keys, resulting in a tensor of $(N * h) \times L_{queries} \times L_{keys}$.
 
-The dot-products are scaled by $\sqrt{d_{model}}$.
+The dot-products are scaled by $\sqrt{d_{keys}}$.
 
 Before computing the *Softmax*, we need to **mask away invalid attention access** as per the rules described [earlier](https://github.com/sgrvinod/a-PyTorch-Tutorial-to-Transformers#can-anything-attend-to-anything). We introduce up to two masks –
 
